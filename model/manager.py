@@ -20,7 +20,7 @@ loss_map = {
                 'Binary_CrossEntropyLoss': nn.BCELoss()
             }
 
-class ADBManager:
+class DRTManager:
 
     def __init__(self, args, data, model, logger_name='Detection'):
 

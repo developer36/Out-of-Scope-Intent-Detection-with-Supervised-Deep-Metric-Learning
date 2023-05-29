@@ -75,7 +75,7 @@ def get_examples(args, base_attrs, mode):
 
 
 def get_loader(examples, args, label_list, mode, sampler_mode='sequential'):
-    tokenizer = BertTokenizer.from_pretrained('/home/jovyan/oos可视化/my_pretrain/', do_lower_case=True)
+    tokenizer = BertTokenizer.from_pretrained(args.pretrain_model_dir, do_lower_case=True) #'/home/jovyan/oos可视化/my_pretrain/'
     features, label_map = convert_examples_to_features(examples, label_list, args.max_seq_length, tokenizer)
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)

@@ -1,5 +1,50 @@
-class Param():
+import argparse
+import os
+import importlib
+from easydict import EasyDict
 
+
+class ParamManager:
+
+    def __init__(self, args):
+
+        output_path_param = self.add_output_path_param(args)
+        model_hyper_params = ModelHyperParam(args).hyper_param
+
+        self.args = EasyDict(
+            dict(
+                vars(args),
+                **output_path_param,
+                **model_hyper_params
+            )
+        )
+
+    def add_output_path_param(self, args):
+
+        task_output_dir = os.path.join(args.output_dir, args.type)
+        if not os.path.exists(task_output_dir):
+            os.makedirs(task_output_dir)
+
+        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone, args.seed]
+        method_output_name = "_".join([str(x) for x in concat_names])
+
+        method_output_dir = os.path.join(task_output_dir, method_output_name)
+        if not os.path.exists(method_output_dir):
+            os.makedirs(method_output_dir)
+
+        model_output_dir = os.path.join(method_output_dir, args.model_dir)
+        if not os.path.exists(model_output_dir):
+            os.makedirs(model_output_dir)
+
+        output_path_param = {
+            'method_output_dir': method_output_dir,
+            'model_output_dir': model_output_dir
+        }
+
+        return output_path_param
+
+
+class ModelHyperParam(object):
     def __init__(self, args):
         self.hyper_param = self.get_hyper_parameters(args)
 
@@ -40,5 +85,3 @@ class Param():
 
         }
         return hyper_parameters
-#'lr': 2e-5,
-#'num_train_epochs': 50,

@@ -4,7 +4,7 @@ import random
 import torch
 import logging
 
-from .__init__ import max_seq_lengths, backbone_loader_map, benchmark_labels
+from .__init__ import max_seq_lengths, BERT_Loader, benchmark_labels
 
 
 def set_seed(seed):
@@ -55,7 +55,7 @@ class DataManager:
 
     def get_loader(self, args, attrs):
 
-        dataloader = backbone_loader_map[args.backbone](args, attrs, args.logger_name)  # backbone='bert' -> BERT_Loader
+        dataloader = BERT_Loader(args, attrs, args.logger_name)
 
         return dataloader
 

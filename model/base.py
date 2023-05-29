@@ -40,7 +40,7 @@ class ModelManager:
         args.device = self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')
 
         if pattern == 'bert':
-            model = backbone.from_pretrained('/home/jovyan/oos可视化/my_pretrain', cache_dir="cache", args=args)
+            model = backbone.from_pretrained(args.pretrain_model_dir, cache_dir="cache", args=args) ##'/home/jovyan/oos可视化/my_pretrain'
             if args.freeze_backbone_parameters:  # True
                 self.logger.info('Freeze all parameters but the last layer for efficiency')
                 model = freeze_bert_parameters(model)
