@@ -5,10 +5,10 @@ do
     do
         for labeled_ratio in 1.0
         do
-            for seed in 0 1 2
+            for seed in 0
                 do
                     python run.py \
-                    --pretrain_model_dir '/home/jovyan/oos可视化/my_pretrain' \
+                    --pretrain_model_dir '/home/jovyan/pretrain_models/bert-base-chinese' \
                     --data_dir './dataset/' \
                     --dataset $dataset \
                     --epsilon 0.5 \
@@ -20,7 +20,8 @@ do
                     --pretrain \
                     --train \
                     --results_file_name 'results_banking_FGM.csv' \
-                    --save_results
+                    --save_results \
+                    --num_train_epochs 5
                 done
         done
     done

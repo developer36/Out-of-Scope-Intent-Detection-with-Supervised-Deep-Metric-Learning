@@ -46,9 +46,9 @@ def save_results(args, test_results):
     import datetime
     created_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed, args.epsilon,
+    var = [args.dataset, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed, args.epsilon,
            args.num_train_epochs, created_time]
-    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed', 'epsilon', 'train_epochs',
+    names = ['dataset', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed', 'epsilon', 'train_epochs',
              'created_time']
     vars_dict = {k: v for k, v in zip(names, var)}
     results = dict(test_results, **vars_dict)

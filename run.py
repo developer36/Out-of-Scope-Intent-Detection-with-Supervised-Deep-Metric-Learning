@@ -37,16 +37,9 @@ def parse_arguments():
 
     parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
-    # parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
-
-    #parser.add_argument("--config_file_name", type=str, default='ADB.py', help="The name of the config file.")
-
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
 
     parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
-
-    # parser.add_argument("--pipe_results_path", type=str, default='pipe_results',
-    #                     help="the path to save results of pipeline methods")
 
     parser.add_argument("--data_dir", default=sys.path[0] + './data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
