@@ -6,11 +6,11 @@ import os
 import logging
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
-from boundary import BoundaryLoss
+from .boundary import BoundaryLoss
 from utils.functions import save_model, euclidean_metric
 from utils.metrics import F_measure
 from utils.functions import restore_model, centroids_cal
-from pretrain import PretrainManager
+from .pretrain import PretrainManager
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import pandas as pd
