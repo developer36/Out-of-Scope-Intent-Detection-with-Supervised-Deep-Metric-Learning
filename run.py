@@ -6,7 +6,7 @@ import datetime
 from config.config import ParamManager
 from dataloader.base import DataManager
 from model.manager import DRTManager
-from model.base import ModelManager
+from model.base import TextRepresentation
 from utils.functions import save_results
 
 # from manager import ADBManager
@@ -51,8 +51,9 @@ def parse_arguments():
     parser.add_argument("--data_dir", default=sys.path[0] + './data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
-    parser.add_argument("--output_dir", default='./', type=str,
+    parser.add_argument("--output_dir", default='./saved_models', type=str,
                         help="The output directory where all train data will be written.")
+
     parser.add_argument("--pretrain_model_dir", default='./', type=str,
                         help="The pretrain model directory.")
 
@@ -74,7 +75,7 @@ def parse_arguments():
     parser.add_argument("--dataset_neg", default="SQUAD", help="")
     parser.add_argument("--lr", default=2e-5, type=float)
     parser.add_argument("--num_train_epochs", default=50, type=int)
-    parser.add_argument("--margin", default=1.0, type=float)
+    parser.add_argument("--margin", default=1.0, type=float, help="TripletLoss hyper parameter")
 
     args = parser.parse_args()
 
@@ -86,7 +87,7 @@ def set_logger(args):
         os.makedirs(args.log_dir)
 
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    file_name = f"{args.method}_{args.dataset}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
+    file_name = f"{args.dataset}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
 
     logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)
@@ -106,14 +107,14 @@ def set_logger(args):
     return logger
 
 
-def run(args, data, model):
-    method = DRTManager(args, data, model, logger_name=args.logger_name)
+def run(args, data, text_encoder):
+    model = DRTManager(args, data, text_encoder, logger_name=args.logger_name)
     if args.train:
         print('training begin...')
-        method.train(args, data)
+        model.train(args, data)
 
     print('testing begin...')
-    outputs = method.test(args, data)
+    outputs = model.test(args, data)
 
     if args.save_results:
         print('Results saved in %s', str(os.path.join(args.result_dir, args.results_file_name)))
@@ -126,9 +127,10 @@ if __name__ == '__main__':
     param = ParamManager(args)
     args = param.args
     # print(args)
-    # print('='*60)
-
+    print('='*60)
+    print('data loading')
     data = DataManager(args, logger_name=args.logger_name)
-    model = ModelManager(args, data, logger_name=args.logger_name)
+    print('text representation model loading')
+    text_encoder = TextRepresentation(args, data, logger_name=args.logger_name)
 
-    run(args, data, model)
+    run(args, data, text_encoder)

@@ -2,10 +2,9 @@ import torch
 import logging
 from transformers import AdamW, get_linear_schedule_with_warmup
 from .utils import freeze_bert_parameters
-from .__init__ import backbones_map
+from .bert import BERT
 
-class ModelManager:
-
+class TextRepresentation(object):
     def __init__(self, args, data, logger_name='Detection'):
 
         self.logger = logging.getLogger(logger_name)
@@ -34,25 +33,18 @@ class ModelManager:
         return optimizer, scheduler
 
     def set_model(self, args, pattern):
-        print('='*30,args.backbone)
+        print('='*15, 'load bert mdoel', '='*15)
         #print(backbones_map)
-        backbone = backbones_map[args.backbone]  # ** BERT
+        # backbone = backbones_map[args.backbone]  # ** BERT
         args.device = self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')
 
         if pattern == 'bert':
-            model = backbone.from_pretrained(args.pretrain_model_dir, cache_dir="cache", args=args) ##'/home/jovyan/oos可视化/my_pretrain'
+            model = BERT.from_pretrained(args.pretrain_model_dir, cache_dir="cache", args=args) ##'/home/jovyan/oos可视化/my_pretrain'
             if args.freeze_backbone_parameters:  # True
                 self.logger.info('Freeze all parameters but the last layer for efficiency')
                 model = freeze_bert_parameters(model)
+        else:
+            print('Must load bert model')
         model.to(self.device)
-
-        '''
-        def freeze_bert_parameters(model):
-            for name, param in model.bert.named_parameters():
-                param.requires_grad = False
-                if "encoder.layer.11" in name or "pooler" in name:
-                    param.requires_grad = True
-            return model
-        '''
         return model
 

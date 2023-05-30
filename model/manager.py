@@ -35,8 +35,8 @@ class DRTManager:
             from dataloader.base import DataManager
             data = DataManager(args, logger_name=None)
 
-            from model.base import ModelManager
-            model = ModelManager(args, data, logger_name='')
+            from model.base import TextRepresentation
+            model = TextRepresentation(args, data, logger_name='')
 
         self.device = model.device
 
